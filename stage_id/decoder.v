@@ -219,7 +219,7 @@ always @(*) begin
     id_sys <= (inst[32:15] == 17'b00000000001010100);
     id_brk <= (inst[32:15] == 17'b00000000001010110);
     id_ecode <= inst[14:0];
-    id_ine <= (op_type == `OP_TYPE_INVALID);
+    id_ine <= (op_type == `OP_TYPE_INVALID);            //id_ine为1，意味着指令invalid，发生例外
 end
 
 endmodule

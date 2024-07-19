@@ -90,6 +90,10 @@ wire [31:0] id_rd_from_gr;
 wire [4:0] id_reg_d;
 wire [4:0] id_reg_j;
 wire [4:0] id_reg_k;
+wire       id_sys;
+wire       id_brk;
+wire       id_ine;
+wire [14:0]id_ecode;
 wire [7:0] id_op;
 wire [3:0] id_op_type;
 wire [25:0] id_imm;
@@ -163,6 +167,10 @@ hazard_ctrl U_hazard_ctrl(
         .ex_pc_branch(ex_pc_branch),
         .ex_branch_bp(id_ex.branch_bp),
         .id_pc(if2_id.pc),
+        .id_sys(id_sys),
+        .id_brk(id_brk),
+        .id_ine(id_ine),
+        .id_ecode(id_ecode),
         .id_is_branch(id_is_branch),
         .id_branch_bp(if2_id.branch_bp),
         .id_reg_j_ren(id_reg_j_ren),
@@ -271,6 +279,10 @@ assign debug_wb_rf_wnum = wb_gr_waddr;
 assign debug_wb_rf_wdata = wb_gr_wdata;
 
 decoder U_decoder(
+            .id_sys(id_sys),
+            .id_brk(id_brk),
+            .id_ine(id_ine),
+            .id_ecode(id_ecode),
             .reg_d(id_reg_d),
             .reg_j(id_reg_j),
             .reg_k(id_reg_k),
@@ -504,5 +516,24 @@ regwrite U_regwrite(
             .rdata(mm2_wb.rdata),
             .gr_waddr(wb_gr_waddr),
             .gr_wdata(wb_gr_wdata));
+
+csr U_csr(
+            csr_rdata(csr_rdata),
+            exception_entry(exception_entry),
+            exception_return_entry(exception_return_entry),
+            interruption(interruption),
+//input
+            clk(clk),
+            rst_n(rst_n),
+            csr_addr(csr_addr),
+            csr_wdata(csr_wdata),
+            csr_wmask(csr_wmask),
+            csr_we(csr_we),
+            ertn_flush(ertn_flush),
+            wb_exception(wb_exception),
+            wb_ecode(wb_ecode),
+            wb_esubcode(wb_esubcode),
+            wb_vaddr(wb_vaddr),
+            wb_pc(wb_pc));
 
 endmodule
