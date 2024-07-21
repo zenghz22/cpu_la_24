@@ -1,4 +1,4 @@
-`include "C:\Users\Lenovo\Desktop\cdp_ede_local-master\mycpu_env\myCPU\defs.v"
+`include ".\defs.v"
 
 module core (
 //output
@@ -516,12 +516,13 @@ regwrite U_regwrite(
             .rdata(mm2_wb.rdata),
             .gr_waddr(wb_gr_waddr),
             .gr_wdata(wb_gr_wdata));
-
+/*
 csr U_csr(
             csr_rdata(csr_rdata),
             exception_entry(exception_entry),
             exception_return_entry(exception_return_entry),
             interruption(interruption),
+
 //input
             clk(clk),
             rst_n(rst_n),
@@ -535,5 +536,5 @@ csr U_csr(
             wb_esubcode(wb_esubcode),
             wb_vaddr(wb_vaddr),
             wb_pc(wb_pc));
-
+*/
 endmodule

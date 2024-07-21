@@ -1,8 +1,8 @@
-`include "C:\Users\Lenovo\Desktop\cdp_ede_local-master\mycpu_env\myCPU\defs.v"
+`include ".\defs.v"
 
 module mycpu_top(
-    input  wire        clk,
-    input  wire        resetn,
+    input  wire        aclk,
+    input  wire        aresetn,
     // read req channel
     output [ 3:0] arid   ,  
     output [31:0] araddr ,  
@@ -94,12 +94,12 @@ core U_core (
             .inst_cache_hit(inst_cache_hit),
             .data_cache_rdata(data_cache_rdata),
             .data_cache_hit(data_cache_hit),
-            .clk(clk),
-            .rst_n(resetn));
+            .clk(aclk),
+            .rst_n(aresetn));
 
 fakecache U_fakecache_inst(
-            .clk(clk),
-            .rst_n(resetn),
+            .clk(aclk),
+            .rst_n(aresetn),
             .cache_re(inst_cache_re),
             .cache_raddr(inst_cache_raddr),
             .cache_rdata(inst_cache_rdata),
@@ -115,8 +115,8 @@ fakecache U_fakecache_inst(
             .sram_rdata(inst_sram_rdata));
     
 fakecache U_fakecache_data(
-            .clk(clk),
-            .rst_n(resetn),
+            .clk(aclk),
+            .rst_n(aresetn),
             .cache_re(data_cache_re),
             .cache_raddr(data_cache_raddr),
             .cache_rdata(data_cache_rdata),
@@ -132,8 +132,8 @@ fakecache U_fakecache_data(
             .sram_rdata(data_sram_rdata));
 
 axi_bridge U_axi_bridge (
-            .clk(clk),
-            .reset(reset),
+            .aclk(aclk),
+            .aresetn(aresetn),
 
             .arid(arid),
             .araddr(araddr),
@@ -179,17 +179,17 @@ axi_bridge U_axi_bridge (
             .inst_sram_req      (1'b1      ),
             .inst_sram_wr       (inst_cache_we       ),
             .inst_sram_size     (inst_cache_access_sz     ),
-            .inst_sram_addr     (inst_cache_raddr----inst_cache_waddr     ),
+            .inst_sram_addr     (inst_cache_we?inst_cache_waddr:inst_cache_raddr),
             .inst_sram_wstrb    (1'b1    ),
             .inst_sram_wdata    (inst_sram_wdata    ),
             .inst_sram_addr_ok  (  ),
             .inst_sram_data_ok  (  ),
             .inst_sram_rdata    (inst_cache_rdata    ),
 
-            .data_sram_req      (1'b1      ),
+            .data_sram_req      (1'b0      ),
             .data_sram_wr       (data_cache_we       ),
             .data_sram_size     (data_cache_access_sz     ),
-            .data_sram_addr     (data_cache_raddr---data_cache_waddr     ),
+            .data_sram_addr     (data_cache_we?data_cache_waddr:data_cache_raddr),
             .data_sram_wstrb    (1'b1    ),
             .data_sram_wdata    (data_cache_wdata    ),
             .data_sram_addr_ok  (  ),

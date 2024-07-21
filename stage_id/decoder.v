@@ -1,4 +1,4 @@
-`include "C:\Users\Lenovo\Desktop\cdp_ede_local-master\mycpu_env\myCPU\defs.v"
+`include "..\defs.v"
 // 暂时未考虑 BREAK 和 SYSCALL
 
 module decoder (
@@ -119,12 +119,7 @@ decoder_rdcnt U_decoder_rdcnt(
             .op(op_rdcnt)
 );
 
-always @(*) begin
-    if(inst == 32'b00000110_01001000_00111000_00000000)
-        op_etrn = `OP_ETRN;
-    else
-        op_etrn = `OP_INVALID;
-end
+assign op_etrn =(inst == 32'b00000110_01001000_00111000_00000000)?`OP_ETRN:`OP_INVALID;
 
 always @(*) begin
     if(op_2ri12 != `OP_INVALID) begin

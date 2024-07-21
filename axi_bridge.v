@@ -1,4 +1,4 @@
-module bridge_sram_axi(
+module axi_bridge(
     input               aclk,
     input               aresetn,
     // read req channel
