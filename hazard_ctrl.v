@@ -30,11 +30,6 @@ module hazard_ctrl (
         ex_branch_bp,
         id_pc,
 
-        id_sys,
-        id_brk,
-        id_ine,
-        id_ecode,
-
         id_is_branch,
         id_branch_bp,
 
@@ -64,11 +59,6 @@ input wire[31:0] id_pc;
 input wire ex_branch;
 input wire [31:0] ex_pc_branch;
 input wire ex_branch_bp;
-
-input wire id_sys;
-input wire id_brk;
-input wire id_ine;
-input wire [14:0] id_ecode;
 
 input wire id_is_branch;
 input wire id_branch_bp;
@@ -219,27 +209,7 @@ always @(*) begin
 end
 
 always @(*) begin
-    if(id_ine) begin
-        pc_wen <= 0;
-        pc_is_wrong <= 0;
-        pc_correct <= 32'h0;
-
-        if1_if2_flush <= 1;
-        if2_id_flush <= 1;
-        id_ex_flush <= 0;
-        ex_mm1_flush <= 0;
-        mm1_mm2_flush <= 0;
-        mm2_wb_flush <= 0;
-
-        if1_if2_wen <= 0;
-        if2_id_wen <= 0;
-        id_ex_wen <= 0;
-        id_ex_bp_flush <= 0;
-        ex_mm1_wen <= 0;
-        mm1_mm2_wen <= 0;
-        mm2_wb_wen <= 0;
-    end
-    else if(!ex_exe_out_valid) begin
+    if(!ex_exe_out_valid) begin
         pc_wen <= 0;
         pc_is_wrong <= 0;
         pc_correct <= 32'h0;
