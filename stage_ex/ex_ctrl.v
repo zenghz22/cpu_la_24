@@ -29,7 +29,7 @@ module ex_ctrl (
         u12imm);
 
 input wire [7:0] op;
-input wire [3:0] op_type;
+input wire [2:0] op_type;
 input wire [31:0] alu_out;
 input wire [31:0] mul_out;
 input wire mul_out_valid;

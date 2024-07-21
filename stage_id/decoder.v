@@ -37,7 +37,7 @@ output reg [4:0] reg_d;
 output reg [4:0] reg_j;
 output reg [4:0] reg_k;
 output reg [7:0] op;
-output reg [3:0] op_type;
+output reg [2:0] op_type;
 output reg [25:0] imm;
 output reg [2:0] imm_sz;
 output reg flag_unsigned;
