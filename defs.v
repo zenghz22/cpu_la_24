@@ -167,3 +167,11 @@
 `define ESUBCODE_ADEF   9'b00
 
 `define CSR_REG_SIZE 64
+
+`define N       2
+`define H       256
+`define W       4
+`define LOG_N   1
+`define LOG_H   8
+`define LOG_W   2
+`define TAG_LEN 20
