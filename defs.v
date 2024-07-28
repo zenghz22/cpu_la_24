@@ -5,7 +5,7 @@
 `define OP_TYPE_CSR 4'd4
 `define OP_TYPE_U12I 4'd5
 `define OP_TYPE_RDCNT 4'd6
-`define OP_TYPE_ETRN 4'd8
+`define OP_TYPE_ERTN 4'd8
 
 `define OP_TYPE_INVALID 4'd0
 
@@ -65,29 +65,30 @@
 `define OP_LU12I 8'd33
 `define OP_PCADDU12I 8'd34
 //rdcnt
-`define OP_RDCNT 8'd49
-`define OP_RDCNTH 8'd50
-//etrn
-`define OP_ETRN 8'd51
+`define OP_RDCNTID 8'd49
+`define OP_RDCNTVL 8'd50
+`define OP_RDCNTVH 8'd51
+//ertn
+`define OP_ERTN 8'd52
 
 `define OP_INVALID 8'd0
 
 `define ACCESS_SZ_BYTE 2'b00
 `define ACCESS_SZ_HALF 2'b01
-`define ACCESS_SZ_WORD 2'b10    
+`define ACCESS_SZ_WORD 2'b10
 `define ACCESS_SZ_INVALID 2'b11
 
 `define BTB_NN 2'd0
 `define BTB_NB 2'd1
 `define BTB_BN 2'd2
 `define BTB_BB 2'd3
- 
+
 `define BTB_WIDTH 35 //validbit:1,predictbit:2,target:32
-`define VALID_BIT 34
-`define PREDICT_BIT 33:32
-`define HIGH_PREDICT_BIT 33
-`define LOW_PREDICT_BIT 32
-`define TARGET_BIT 31:0
+`define BTB_VALID_BIT 34
+`define BTB_PREDICT_BIT 33:32
+`define BTB_HIGH_PREDICT_BIT 33
+`define BTB_LOW_PREDICT_BIT 32
+`define BTB_TARGET_BIT 31:0
 
 `define IMM_SZ_8 3'd7
 `define IMM_SZ_12 3'd1
@@ -109,12 +110,16 @@
 
 `define CSR_CRMD_PLV    1 :0
 `define CSR_CRMD_IE     2
+`define CSR_CRMD_DA     3
+`define CSR_CRMD_PG     4
 `define CSR_PRMD_PPLV   1 :0
 `define CSR_PRMD_PIE    2
 `define CSR_ECFG_LIE    12:0
 `define CSR_ECFG_LIE90  9 :0
 `define CSR_ESTAT_IS10  1 :0
-`define CSR_ESTAT_IS    9 :0
+`define CSR_ESTAT_IS    12 :0
+`define CSR_ESTAT_ECODE 21:16
+`define CSR_ESTAT_ESUBCODE 31:22
 `define CSR_ERA_PC      31:0
 `define CSR_EENTRY_VADDR   31:6
 `define CSR_SAVE_DATA   31:0
@@ -158,20 +163,30 @@
 
 `define ECODE_INT       6'h00
 `define ECODE_ADE       6'h08   // ADEM: esubcode=1; ADEF: esubcode=0
-`define ECODE_ALE       6'h09   
+`define ECODE_ALE       6'h09
 `define ECODE_SYS       6'h0B
-`define ECODE_BRK       6'h0C   
+`define ECODE_BRK       6'h0C
 `define ECODE_INE       6'h0D
 `define ECODE_TLBR      6'h3F
 
 `define ESUBCODE_ADEF   9'b00
 
-`define CSR_REG_SIZE 64
+`define CSR_REG_SIZE 4096
 
-`define N       4
-`define H       256
-`define W       4
-`define LOG_N   2
-`define LOG_H   8
-`define LOG_W   2
-`define TAG_LEN 20
+`define CACHE_N       4
+`define CACHE_H       256
+`define CACHE_W       4
+`define CACHE_LOG_H   8
+`define CACHE_LOG_W   2
+`define CACHE_LOG_N   2
+`define CACHE_TAG_LEN 20
+
+`define CACHE_OP_RD  0
+`define CACHE_OP_WR  1
+
+`define CACHE_STATE_IDLE 3'b000
+`define CACHE_STATE_RW  3'b001
+`define CACHE_STATE_MISS 3'b010
+`define CACHE_STATE_REFILL 3'b011
+`define CACHE_WRBUF_IDLE 1'b0
+`define CACHE_WRBUF_WRITE 1'b1

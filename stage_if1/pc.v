@@ -1,4 +1,4 @@
-`include "/home/loongsonarch_1/Desktop/cdp_ede_local/mycpu_env/myCPU/defs.v"
+`include "D:\1Learn\24Summer\Lxb\environment_for_la24\mycpu_env_2\myCPU\defs.v"
 module pc(/*autoport*/
 //output
       pc_reg,
@@ -55,7 +55,8 @@ always @(posedge clk) begin
         icache_re <= 1;
     end
     else begin
-        icache_re <= pc_wen;
+        // icache_re <= pc_wen;
+        icache_re <= 1;
     end
 end
 

@@ -1,4 +1,4 @@
-`include "/home/loongsonarch_1/Desktop/cdp_ede_local/mycpu_env/myCPU/defs.v"
+`include "D:\1Learn\24Summer\Lxb\environment_for_la24\mycpu_env_2\myCPU\defs.v"
 
 module icache (
 //output

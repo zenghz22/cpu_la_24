@@ -1,4 +1,4 @@
-`include "/home/loongsonarch_1/Desktop/cdp_ede_local/myCPU/defs.v"
+`include "D:\1Learn\24Summer\Lxb\environment_for_la24\mycpu_env_2\myCPU\defs.v"
 /*
     对于N路组相联，共有H组，每组有N行，每行有W个字，即4W个Byte
     index为LOG_H位的组索引
