@@ -117,11 +117,12 @@ tag_ram my_tag_ram(
     .addr   (tag_ram_index),
     .din    (tag_ram_wdata),
     .dout   (tag_ram_rdata)
-)
+);
 
 //V位和D位
 
 genvar i,j;
+
 generate
      for(i=0;i<`H;i=i+1)begin
          for(j=0;j<`N;j=j+1)begin
@@ -144,7 +145,7 @@ reg   tag_count [`H-1:0][`N-1:0];
 
 //LRU等待完善
 wire [`LOG_N-1:0] replace_way;
-
+assign replace_way = `LOG_N'b0;
 //data_ram
 wire                data_ram_we;
 wire [`LOG_H-1:0]   data_ram_index;
@@ -164,7 +165,7 @@ data_ram my_data_ram(
     .din(data_ram_wdata),
     .dout(data_ram_rdata),
     .dout_replace(data_ram_rdata_replace)
-)
+);
 
 
 

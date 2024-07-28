@@ -12,23 +12,24 @@ module data_ram(
 );
 
 reg [31:0] ram [`H-1:0][`N-1:0][`W-1:0];
-
-always @(posedge clk)begin
-    if(~resetn)begin
-        for(integer i=0;i<`H;i+=1)begin
-            for(integer j=0;j<`N;j+=1)begin
-                for(integer k=0;k<`W;k+=1)begin
-                    ram[i][j][k] <= 32'b0;
+genvar i,j,k;
+generate
+    for(i=0;i<`H;i=i+1)begin
+        for(j=0;j<`N;j=j+1)begin
+            for(k=0;k<`W;k=k+1)begin
+                always @(posedge clk)begin
+                    if(~resetn)begin
+                        ram[i][j][k] <= 32'b0;
+                    end
+                    else begin 
+                        if(we) ram[index][way][offset] <= din;
+                        dout <= ram[index][way][offset];
+                    end
                 end
             end
-        end 
-    end
-    else begin 
-        if(we) ram[index][way][offset] <= din;
-        dout <= ram[index][way][offset];
-    end
-end
-for(integer k;k<`W;k+=1)begin
-    dout_replace[32*k+31 : 32*k] = ram[index][way][k];
-end
+        end        
+    end    
+endgenerate    
+
+assign dout_replace = {ram[index][way][3],ram[index][way][2],ram[index][way][1],ram[index][way][0]};
 endmodule

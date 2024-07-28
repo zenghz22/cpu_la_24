@@ -1,4 +1,4 @@
-`include "..\defs.v"
+`include "/home/loongsonarch_1/Desktop/cdp_ede_local/mycpu_env/myCPU/defs.v"
 
 module alu_in2_mux (
 //output
@@ -13,7 +13,7 @@ module alu_in2_mux (
     flag_unsigned);
 
 input wire [7:0] op;
-input wire [2:0] op_type;
+input wire [3:0] op_type;
 input wire [31:0] rk_from_fwd;
 input wire [25:0] imm_unext;
 input wire [2:0] imm_sz;

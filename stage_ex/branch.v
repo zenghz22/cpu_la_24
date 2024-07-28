@@ -1,4 +1,4 @@
-`include "..\defs.v"
+`include "/home/loongsonarch_1/Desktop/cdp_ede_local/mycpu_env/myCPU/defs.v"
 module branch (
 //output
             branch,
@@ -9,7 +9,7 @@ module branch (
             rd);
     
 input wire [7:0] op;
-input wire [2:0] op_type;
+input wire [3:0] op_type;
 input wire [31:0] rj;
 input wire [31:0] rd;
 

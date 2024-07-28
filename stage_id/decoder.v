@@ -1,12 +1,11 @@
-`include "..\defs.v"
-// 暂时未考虑 BREAK 和 SYSCALL
+`include "/home/loongsonarch_1/Desktop/cdp_ede_local/mycpu_env/myCPU/defs.v"
 
 module decoder (
 //output
             id_sys,
             id_brk,
             id_ine,
-            id_ecode,
+            id_sbcode,
             reg_d,
             reg_j,
             reg_k,
@@ -25,23 +24,25 @@ module decoder (
             reg_k_ren,
             reg_d_ren,
 //input
-            inst);
+            inst,
+            id_flushed);
 
 input wire [31:0] inst;
+input wire id_flushed;
 
 output reg id_sys;
 output reg id_brk;
 output reg id_ine;
-output reg [14:0] id_ecode;
+output reg [14:0] id_sbcode;
 output reg [4:0] reg_d;
 output reg [4:0] reg_j;
 output reg [4:0] reg_k;
 output reg [7:0] op;
-output reg [2:0] op_type;
+output reg [3:0] op_type;
 output reg [25:0] imm;
 output reg [2:0] imm_sz;
 output reg flag_unsigned;
-output reg [2:0] access_sz;
+output reg [1:0] access_sz;
 output reg is_branch;
 output reg [14:0] bns_code;
 output reg [4:0] shift_imm;
@@ -58,12 +59,17 @@ wire [7:0] op_atomic;
 wire [7:0] op_csr;
 wire [7:0] op_u12i;
 wire [7:0] op_rdcnt;
-wire [7:0] op_etrn;
+reg [7:0] op_ertn;
 
 always@(*) begin
-    reg_d <= inst[4:0];
     reg_j <= inst[9:5];
     reg_k <= inst[14:10];
+end
+
+always @(*) begin
+    reg_d <= op == `OP_BL ? 5'h01 :
+            op == `OP_RDCNTID ? inst[9:5] :
+            inst[4 : 0];
 end
 
 always @(*) begin
@@ -119,7 +125,12 @@ decoder_rdcnt U_decoder_rdcnt(
             .op(op_rdcnt)
 );
 
-assign op_etrn =(inst == 32'b00000110_01001000_00111000_00000000)?`OP_ETRN:`OP_INVALID;
+always @(*) begin
+    if(inst == 32'b00000110_01001000_00111000_00000000)
+        op_ertn = `OP_ERTN;
+    else
+        op_ertn = `OP_INVALID;
+end
 
 always @(*) begin
     if(op_2ri12 != `OP_INVALID) begin
@@ -143,8 +154,8 @@ always @(*) begin
     else if(op_rdcnt != `OP_INVALID) begin
         op_type = `OP_TYPE_RDCNT;
     end
-    else if(op_etrn != `OP_INVALID) begin
-        op_type = `OP_TYPE_ETRN;
+    else if(op_ertn != `OP_INVALID) begin
+        op_type = `OP_TYPE_ERTN;
     end
     else begin
         op_type = `OP_TYPE_INVALID;
@@ -160,7 +171,7 @@ always @(*) begin
         `OP_TYPE_CSR: op = op_csr;
         `OP_TYPE_U12I: op = op_u12i;
         `OP_TYPE_RDCNT: op = op_rdcnt;
-        `OP_TYPE_ETRN: op = op_etrn;
+        `OP_TYPE_ERTN: op = op_ertn;
         default: op = `OP_INVALID;
     endcase
 end
@@ -211,10 +222,10 @@ always @(*) begin
 end
 
 always @(*) begin
-    id_sys <= (inst[32:15] == 17'b00000000001010100);
-    id_brk <= (inst[32:15] == 17'b00000000001010110);
-    id_ecode <= inst[14:0];
-    id_ine <= (op_type == `OP_TYPE_INVALID);            //id_ine为1，意味着指令invalid，发生例外
+    id_sys <= (inst[31:15] == 17'b00000000001010110);
+    id_brk <= (inst[31:15] == 17'b00000000001010100);
+    id_sbcode <= inst[14:0];
+    id_ine <= (op_type == `OP_TYPE_INVALID && !id_flushed);
 end
 
 endmodule

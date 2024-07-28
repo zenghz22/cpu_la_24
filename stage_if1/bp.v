@@ -1,4 +1,4 @@
-`include "..\defs.v"
+`include "/home/loongsonarch_1/Desktop/cdp_ede_local/mycpu_env/myCPU/defs.v"
 
 module bp (
 //output

@@ -77,7 +77,7 @@ module cache_tb();
         ret_data = 0;
         wr_rdy = 0;
 
-        #(`CLK_PERIOD) resetn = 1;
+        #2000 resetn = 1;
 
         // write
         for (i = 0; i < 4; i = i + 1) begin
