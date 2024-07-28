@@ -241,21 +241,24 @@ assign hit_way = (tag_hit == 4'b1000)?2'd3:
                  (tag_hit == 4'b0001)?2'd0:2'd0;
 
  
-assign hit        = tag_hit[0] || tag_hit[1] || tag_hit[2] || tag_hit[3];
+assign hit        = tag_hit[0] || tags_hit[1] || tag_hit[2] || tag_hit[3];
 
 
 assign data_ram_index  = (state == IDLE ||state == RW )?index:index_r;
 assign data_ram_offset = (state == IDLE ||state == RW )?offset:refill_count;
 assign data_ram_way    = (state == IDLE ||state == RW )? hit_way : replace_way; 
-assign data_ram_we     = ((state == IDLE ||state == RW )&&valid&&op)||(state==REFILL&&ret_valid);
+assign data_ram_we     =((state == IDLE ||state == RW )&&valid&&op)||(state==REFILL&&ret_valid);
 assign data_ram_wdata  = (state == IDLE ||state == RW )?wdata:ret_data;
-assign data_valid      = state==RW && op_r;
+assign wdata_valid      = state==RW && op_r;
 assign rdata           = (state==REFILL&&refill_count == offset_r)? data_ram_rdata : ret_data;
 assign rdata_valid     = (state==RW && ~op_r)||(state==REFILL&&refill_count == offset_r);
 assign tag_ram_index   = index;
 assign tag_ram_way     = replace_way;
 assign tag_ram_we      = (state == IDLE ||state == RW )&&valid&&~hit&&(op==1'b1);
 assign tag_ram_wdata   = tag;
+assign rd_req          = (state == IDLE ||state == RW )&&valid&&~hit&&~op;
+assign rd_addr         = addr;
+assign rd_type         = `ACCESS_SZ_WORD;
 
 
 /*
@@ -313,6 +316,11 @@ assign tag_valid[index][replace_way] =1'b1;
         tag_ram_wdata  = tag;
     end
     //MISS了，是读，不好处理，要阻塞
+if(valid&&~hit&&~op)begin
+    assign rd_req =1;
+    assign rd_raddr = addr;
+    assign rd_type =010;    
+end
 end
 */
 
