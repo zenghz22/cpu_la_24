@@ -1,12 +1,12 @@
-`include ".\defs.v"
+`include "D:\1Learn\24Summer\Lxb\cpu_la_24\defs.v"
 module tag_ram(
-    input                clk,
-    input                resetn,
-    input                we,
-    input [`LOG_W-1:0]   way,
-    input [`LOG_H-1:0]   addr,
-    input [`TAG_LEN-1:0] din ,
-    output[`N*`TAG_LEN-1:0] dout
+    input wire               clk,
+    input wire               resetn,
+    input wire               we,
+    input wire [`LOG_W-1:0]   way,
+    input wire [`LOG_H-1:0]   addr,
+    input wire [`TAG_LEN-1:0] din ,
+    output wire[`N*`TAG_LEN-1:0] dout
 );
 
 reg [`TAG_LEN-1:0] ram [`H-1:0][`N-1:0];

@@ -168,10 +168,10 @@
 
 `define CSR_REG_SIZE 64
 
-`define N       2
+`define N       4
 `define H       256
 `define W       4
-`define LOG_N   1
+`define LOG_N   2
 `define LOG_H   8
 `define LOG_W   2
 `define TAG_LEN 20

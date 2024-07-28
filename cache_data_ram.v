@@ -1,7 +1,7 @@
-`include ".\defs.v"
+`include "D:\1Learn\24Summer\Lxb\cpu_la_24\defs.v"
 module data_ram(
-    input                   clk,
-    input                   resetn,
+    input  wire             clk,
+    input  wire             resetn,
     input  wire             we,
     input  wire [`LOG_H-1:0] index,
     input  wire [`LOG_N-1:0] way  ,

@@ -1,4 +1,4 @@
-`include ".\defs.v"
+`include "D:\1Learn\24Summer\Lxb\cpu_la_24\defs.v"
 /*
     对于N路组相联，共有H组，每组有N行，每行有W个字，即4W个Byte
     index为LOG_H位的组索引
@@ -144,8 +144,22 @@ endgenerate
 reg   tag_count [`H-1:0][`N-1:0];
 
 //LRU等待完善
+reg [`LOG_N-1:0] replace_way_reg;
+always@(posedge clk)begin
+    if(~resetn)begin
+        replace_way_reg <= `LOG_N'b0;
+    end
+    else begin
+        replace_way_reg <= replace_way_reg+1'b1;
+    end
+end
+
+
 wire [`LOG_N-1:0] replace_way;
-assign replace_way = `LOG_N'b0;
+assign replace_way = replace_way_reg;
+
+
+
 //data_ram
 wire                data_ram_we;
 wire [`LOG_H-1:0]   data_ram_index;
@@ -174,6 +188,7 @@ data_ram my_data_ram(
 always@(posedge clk)begin
     if(~resetn)begin
         state <= IDLE;
+        next_state <=IDLE;
     end
     else begin
         state <= next_state;
@@ -241,7 +256,7 @@ assign hit_way = (tag_hit == 4'b1000)?2'd3:
                  (tag_hit == 4'b0001)?2'd0:2'd0;
 
  
-assign hit        = tag_hit[0] || tags_hit[1] || tag_hit[2] || tag_hit[3];
+assign hit        = tag_hit[0] || tag_hit[1] || tag_hit[2] || tag_hit[3];
 
 
 assign data_ram_index  = (state == IDLE ||state == RW )?index:index_r;
